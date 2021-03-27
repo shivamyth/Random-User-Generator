@@ -1,25 +1,32 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useState } from "react";
+import { Container, Row, Col } from "reactstrap";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "./App.css";
+import axios from "axios";
+import MyCard from "./MyCard";
 
-function App() {
+const App = () => {
+  const [details, setDetails] = useState({});
+  const fetchDetails = async () => {
+    const { data } = await axios.get("https://randomuser.me/api");
+    const details = data.results[0];
+
+    setDetails(details);
+  };
+
+  useEffect(() => {
+    fetchDetails();
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Container fluid className="p-4 bg-primary App">
+      <Row>
+        <Col md={4} className="offset-md-4 mt-4">
+          <MyCard details={details} />
+        </Col>
+      </Row>
+    </Container>
   );
-}
+};
 
 export default App;
